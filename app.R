@@ -1,5 +1,5 @@
 #.libPaths(c(normalizePath("./libs"), .libPaths()))
-
+library(rmarkdown)
 library(shiny)
 library(stringr)
 library(shinydashboard)
@@ -270,16 +270,15 @@ server <- function(input, output) {
     },
     
     content = function(file) {
-      src <- normalizePath('report.Rmd')
+      src <- normalizePath('report.rmd')
       
       # temporarily switch to the temp dir, in case you do not have write
       # permission to the current working directory
       owd <- setwd(tempdir())
       on.exit(setwd(owd))
-      file.copy(src, 'report.Rmd', overwrite = TRUE)
+      file.copy(src, 'report.rmd', overwrite = TRUE)
       
-      library(rmarkdown)
-      out <- render('report.Rmd')
+      out <- render('report.rmd')
       file.rename(out, file)
     }
   )
@@ -696,7 +695,7 @@ server <- function(input, output) {
   ###########################,
   ##### App functions
   ###########################,
-  inputData <- read.csv("dummy_eCOA.csv", header = TRUE)
+  inputData <- read.csv("data/dummy_eCOA.csv", header = TRUE)
   
   output$downloadData <- downloadHandler(
     filename = function() {
