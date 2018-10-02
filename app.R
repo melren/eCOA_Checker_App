@@ -37,7 +37,7 @@ ui <- dashboardPage(
       menuItem("Diary Data Viewer", tabName = "viewer", icon = icon("table")),
       menuItem("Questions/Need Assistance?", icon = icon("question-circle"),
                br(),
-               div(span(icon("user-circle"), "Melanie Ren (renm1@gene.com)", style = "padding-left:10px"), style = "height:16px;"),
+               div(span(icon("user-circle"), "Melanie Ren (melanie.ren@gmail.com)", style = "padding-left:10px"), style = "height:16px;"),
                br()
       ),
       br(),
