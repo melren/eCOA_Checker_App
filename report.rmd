@@ -1,0 +1,125 @@
+---
+title: "Sample Vendor Portal eCOA QC"
+output: 
+  pdf_document:
+    toc: TRUE
+    toc_depth: 1
+    number_sections: no
+  fontsize: 8pt 
+documentclass: article
+classoption: 
+  - landscape
+  - a4paper
+header-includes:
+  - \usepackage{fancyhdr}
+  - \usepackage{datetime}
+  - \pagestyle{fancy}
+  - \fancyhead{}
+  - \renewcommand{\headrulewidth}{0pt}
+  - \fancyhead[RO,RE]{}
+  - \fancyfoot[LO,LE]{\mmddyydate{\today}\ - \currenttime}
+  - \fancyfoot[RO,RE]{Generated with https://go.gene.com/ga39925datacheck}
+  - \fancypagestyle{plain}{\pagestyle{fancy}}
+---
+
+```{r global option, include=FALSE}
+knitr::opts_chunk$set(fig.width=10,
+                      fig.height=8.5,
+                      comment=NA,
+                      echo = FALSE,
+                      warning=FALSE,
+                      message=FALSE)
+
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(knitr)
+```
+
+\newpage
+# Description of Variables
+
+Variable names in CAPS are from the raw data, while variable names with mixed casing are derived from this application's data-check algorithm.
+
+Variable Name | Description                                              | Excludes Bowel Prep & Endoscopy (+1)
+--------------|----------------------------------------------------------|-----------------
+USUBJID       |Unique subject identifier                          | NA
+Date          |Date of clinical visit/start of visit window       | NA
+Time          |Time of clinical visit/start of visit window       | NA
+VISITNUM      |Clinical visit number label                        | NA
+VISIT         |Clinical Visit type                                | NA
+BwlPrepDt     |Bowel prep date (if available) for the previous visit window | NA
+EndoDt        |Endoscopy date (if available) for the previous visit window | NA
+DRYCMP1N      |Count of total diaries (1 stool + 1 rectal bleeding is counted as 1 entry) completed in visit window | NA
+QSTESTCD      |Short code notation for test category  | NA
+QSTEST        |Extended test category label | NA
+QSSTRESC      |Test result (character) | NA
+QSSTRESN      |Test result (numeric) | NA
+StlDiaryTot   |Count of total stool frequency diaries completed, excluding bowel prep date range | Yes
+StlSum        |Sum of the most (2 or )3 recent stool frequency diary entry scores | Yes
+SFSSCR1N      |Sum of the most (2 or )3 recent stool frequency diary entry scores | Yes
+StlAvg        |Average of the most (2 or )3 recent stool frequency diary entry scores | Yes
+AVGSFS1N      |Average of the most (2 or )3 recent stool frequency diary entry scores | Yes
+RbDiaryTot    |Count of total rectal bleeding diaries completed, excluding bowel prep date range | Yes
+RbSum         |Sum of the most (2 or )3 recent rectal bleeding diary entry scores | Yes
+RBSSCR1N      |Sum of the most (2 or )3 recent rectal bleeding diary entry scores | Yes
+RbAvg         |Average of the most (2 or )3 recent rectal bleeding diary entry scores | Yes
+AVGRBS1N      |Average of the most (2 or )3 recent rectal bleeding diary entry scores | Yes
+
+\newpage
+# Stool Frequency Average Score Miscalculations 
+```{r sf tbl}
+
+paste(nrow(getStlData()),"records found")
+if(nrow(getStlData()) > 0){
+  getStlData() %>%
+    dplyr::select(-VISITNUM) %>%
+    knitr::kable()
+}
+```
+
+# Rectal Bleeding Average Score Miscalculations 
+```{r rb tbl}
+paste(nrow(getRbData()),"records found")
+if(nrow(getRbData()) > 0){
+  getRbData() %>%
+    dplyr::select(-VISITNUM) %>%
+    knitr::kable()
+}
+```
+
+\newpage
+# Randomized Screen Failure Subjects 
+```{r scrnf tbl}
+paste(nrow(getScrnFailRndData()),"records found")
+if(nrow(getScrnFailRndData()) > 0){
+  getScrnFailRndData() %>%
+    knitr::kable()
+}
+```
+
+\newpage
+# Bowel Prep Date/Endoscopy Mismatches 
+This table outputs all records found where the bowel prep date and endoscopy date entered do not make sense:  
+
+* Record of either bowel prep date or endoscopy but not the other
+* Bowel prep that takes place after endoscopy
+* Bowel prep more than 1 day prior to endoscopy
+
+```{r bwlendo}
+paste(nrow(getBwlEndoData()),"records found")
+if(nrow(getBwlEndoData()) > 0){
+  getBwlEndoData() %>%
+    knitr::kable()
+}
+```
+
+\newpage
+# Duplicate Date Diary Entries 
+```{r dup}
+paste(nrow(getDupData()),"records found")
+if(nrow(getDupData()) > 0){
+  getDupData() %>%
+    knitr::kable()
+}
+```
