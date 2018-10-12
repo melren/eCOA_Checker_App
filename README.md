@@ -1,6 +1,8 @@
 # eCOA_Checker_App
 Sample application for vendor eCOA data QC
 
+Working preview: https://melren.shinyapps.io/eCOA_Checker_App/
+
 # About
 This app was created as part of my internship projects at Genentech. It is designed for the QC of received Electronic Clinical Outcome Assessments (eCOA) data provided by an external vendor for our phase II study in the Ulcerative Colitis indication. This is a modified version of the app and is intended to be used as a sample for my project portfolio. The purpose of this application is to cross-check the vendor-derived data values (bundled in the eCOA file with raw data) with our own derivation of the same variables based off the same raw data. It also provides some generic data checks to test for the presence of illogical data.
 
